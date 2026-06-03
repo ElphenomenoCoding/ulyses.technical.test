@@ -40,4 +40,11 @@ public interface BrandService {
      */
     void deleteBrand(Long id);
 
+    /**
+     * Invalidate the cached brand data so subsequent reads reflect the latest state.
+     * Must be called after any change affecting a brand's data, including changes to its
+     * vehicles performed through other services.
+     */
+    void invalidateCache();
+
 }

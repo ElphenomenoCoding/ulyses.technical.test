@@ -1,6 +1,5 @@
 package com.septeo.ulyses.technical.test.service;
 
-import com.septeo.ulyses.technical.test.entity.Brand;
 import com.septeo.ulyses.technical.test.entity.Vehicle;
 import com.septeo.ulyses.technical.test.repository.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +19,8 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Autowired
     private VehicleRepository vehicleRepository;
+    @Autowired
+    private BrandService brandService;
 
     /**
      * {@inheritDoc}
@@ -42,7 +43,9 @@ public class VehicleServiceImpl implements VehicleService {
      */
     @Override
     public Vehicle saveVehicle(Vehicle vehicle) {
-        return vehicleRepository.save(vehicle);
+        Vehicle savedVehicle = vehicleRepository.save(vehicle);
+        brandService.invalidateCache();
+        return savedVehicle;
     }
 
     /**
@@ -51,5 +54,6 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public void deleteVehicle(Long id) {
         vehicleRepository.deleteById(id);
+        brandService.invalidateCache();
     }
 }

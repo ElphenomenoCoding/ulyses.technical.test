@@ -1,15 +1,12 @@
 package com.septeo.ulyses.technical.test.repository;
 
-import com.septeo.ulyses.technical.test.entity.Brand;
 import com.septeo.ulyses.technical.test.entity.Sales;
-import com.septeo.ulyses.technical.test.entity.Vehicle;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,5 +38,30 @@ public class SalesRepositoryImpl implements SalesRepository {
         } catch (NoResultException e) {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public List<Sales> findAll(int offset, int limit) {
+        String stringQuery = "SELECT s FROM Sales s ORDER BY s.id";
+        Query query = entityManager.createQuery(stringQuery);
+        query.setFirstResult(offset);
+        query.setMaxResults(limit);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Sales> findByBrandId(Long brandId) {
+        String stringQuery = "SELECT s FROM Sales s WHERE s.brand.id = :brandId";
+        Query query = entityManager.createQuery(stringQuery);
+        query.setParameter("brandId", brandId);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Sales> findByVehicleId(Long vehicleId) {
+        String stringQuery = "SELECT s FROM Sales s WHERE s.vehicle.id = :vehicleId";
+        Query query = entityManager.createQuery(stringQuery);
+        query.setParameter("vehicleId", vehicleId);
+        return query.getResultList();
     }
 }
